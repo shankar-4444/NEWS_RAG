@@ -7,6 +7,10 @@
 /rag_env/
 # testing
 /coverage
+rag_env/
+*.dll
+*.lib
+
 
 # production
 /build
