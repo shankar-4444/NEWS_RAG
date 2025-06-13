@@ -45,7 +45,7 @@ def fetch_newscatcher(query):
         return []
 
 # === Embedding & Indexing ===
-def create_faiss_index(documents):
+def create_faiss_index(documents, encoder):
     if not documents:
         return None, None
     doc_embeddings = encoder.encode(documents)
@@ -55,7 +55,7 @@ def create_faiss_index(documents):
     return index, doc_embeddings
 
 # === RAG Core ===
-def rag_query(user_query, documents, index, top_k=2):
+def rag_query(user_query, documents, encoder, index, top_k=2):
     if not documents or not index:
         return None
     query_embedding = encoder.encode([user_query])
@@ -108,13 +108,13 @@ def rag_pipeline(user_query):
         user_query = history[-1][0] + " " + user_query
 
     documents = fetch_serper(user_query)
-    index, _ = create_faiss_index(documents)
-    answer = rag_query(user_query, documents, index)
+    index, _ = create_faiss_index(documents, encoder)
+    answer = rag_query(user_query, documents, encoder, index)
 
-    if not answer or "not contain enough details" in answer.lower():
+    if not answer or "don't know" in answer or "not contain enough details" in answer.lower():
         documents = fetch_newscatcher(user_query)
-        index, _ = create_faiss_index(documents)
-        answer = rag_query(user_query, documents, index)
+        index, _ = create_faiss_index(documents, encoder)
+        answer = rag_query(user_query, documents, encoder, index)
 
     final_answer = answer or "The provided information does not contain enough details to answer this question."
     history.append((user_query, final_answer))
