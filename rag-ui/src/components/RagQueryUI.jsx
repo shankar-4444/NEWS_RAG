@@ -1,5 +1,3 @@
-// === RagQueryUI.jsx ===
-
 import React, { useState } from "react";
 
 const RagQueryUI = () => {
@@ -43,54 +41,74 @@ const RagQueryUI = () => {
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
-      <h2>Ask Your RAG Assistant</h2>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Ask something like: 'Latest updates on AI in healthcare'"
-        style={{
-          width: "70%",
-          padding: "0.75rem",
-          fontSize: "1rem",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-        }}
-      />
-      <button
-        onClick={handleQuery}
-        disabled={loading}
-        style={{
-          marginLeft: "1rem",
-          padding: "0.75rem 1rem",
-          fontSize: "1rem",
-          backgroundColor: "#007BFF",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        {loading ? "Processing..." : "Submit"}
-      </button>
+    <div style={{
+      minHeight: "100vh",
+      backgroundColor: "#fdd835",
+      color: "#000",
+      fontFamily: "Helvetica, Arial, sans-serif",
+      padding: "4rem 2rem",
+      textAlign: "center"
+    }}>
+      <h1 style={{ fontSize: "3rem", fontWeight: "900", marginBottom: "2rem" }}>
+        Think outside the RAG space.
+      </h1>
+
+      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Ask your RAG assistant..."
+          style={{
+            padding: "1rem",
+            fontSize: "1.2rem",
+            width: "400px",
+            maxWidth: "100%",
+            border: "none",
+            borderRadius: "0",
+            borderBottom: "4px solid black",
+            backgroundColor: "#fff",
+            color: "#000",
+            outline: "none",
+          }}
+        />
+        <button
+          onClick={handleQuery}
+          disabled={loading}
+          style={{
+            padding: "1rem 2rem",
+            fontSize: "1rem",
+            fontWeight: "bold",
+            backgroundColor: "#000",
+            color: "#fdd835",
+            border: "none",
+            cursor: "pointer",
+            transition: "transform 0.2s ease",
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+          onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+        >
+          {loading ? "Processing..." : "Submit"}
+        </button>
+      </div>
 
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
 
-      <div style={{ marginTop: "2rem" }}>
+      <div style={{ marginTop: "3rem", maxWidth: "800px", marginInline: "auto", textAlign: "left" }}>
         {history.map((item, index) => (
           <div
             key={index}
             style={{
-              background: "#f8f9fa",
-              padding: "1rem",
-              borderRadius: "8px",
-              border: "1px solid #ddd",
+              backgroundColor: "#fff",
+              color: "#000",
+              padding: "1.5rem",
+              borderRadius: "0.5rem",
               marginBottom: "1rem",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
             }}
           >
-            <p><strong>Q:</strong> {item.query}</p>
-            <p><strong>A:</strong> {item.answer}</p>
+            <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>Q: {item.query}</p>
+            <p>A: {item.answer}</p>
           </div>
         ))}
       </div>
