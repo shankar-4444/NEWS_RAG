@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-C:/Users/vsb44/OneDrive/Desktop/RAG_KFORGE/rag_env
+/rag_env/
 # testing
 /coverage
 
