@@ -50,7 +50,7 @@ const RagQueryUI = () => {
       textAlign: "center"
     }}>
       <h1 style={{ fontSize: "3rem", fontWeight: "900", marginBottom: "2rem" }}>
-        Think outside the RAG space.
+        Retrieval Augmented Generation.
       </h1>
 
       <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
@@ -73,23 +73,22 @@ const RagQueryUI = () => {
           }}
         />
         <button
-          onClick={handleQuery}
-          disabled={loading}
-          style={{
-            padding: "1rem 2rem",
-            fontSize: "1rem",
-            fontWeight: "bold",
-            backgroundColor: "#000",
-            color: "#fdd835",
-            border: "none",
-            cursor: "pointer",
-            transition: "transform 0.2s ease",
-          }}
-          onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
-          onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-        >
-          {loading ? "Processing..." : "Submit"}
-        </button>
+  onClick={handleQuery}
+  disabled={loading}
+  className="jiggle-button"
+  style={{
+    padding: "1rem 2rem",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    backgroundColor: "#000",
+    color: "#fdd835",
+    border: "none",
+    cursor: "pointer",
+  }}
+>
+  {loading ? "Processing..." : "Submit"}
+</button>
+
       </div>
 
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
