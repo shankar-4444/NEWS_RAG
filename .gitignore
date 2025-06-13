@@ -1,15 +1,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+rag-ui/node_modules
 /.pnp
 .pnp.js
 /rag_env/
 # testing
 /coverage
 rag_env/
-*.dll
-*.lib
 
 
 # production
