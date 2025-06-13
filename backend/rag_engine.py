@@ -1,5 +1,3 @@
-# rag_engine.py
-
 import requests
 from sentence_transformers import SentenceTransformer
 import faiss
@@ -28,7 +26,7 @@ def fetch_serper(query):
     except:
         return []
 
-# === News Fetcher ===
+# === NewsCatcher Fetcher ===
 def fetch_newscatcher(query):
     conn = http.client.HTTPSConnection("newscatcher.p.rapidapi.com")
     headers = {
@@ -41,6 +39,22 @@ def fetch_newscatcher(query):
         res = conn.getresponse()
         data = json.loads(res.read())
         return [item['summary'] for item in data.get("articles", []) if 'summary' in item]
+    except:
+        return []
+
+# === News67 Fetcher ===
+def fetch_news67(query):
+    url = "https://news67.p.rapidapi.com/news"
+    headers = {
+        "X-RapidAPI-Key": "3e83b5ecabc24103a33eac0754460b9a",
+        "X-RapidAPI-Host": "news67.p.rapidapi.com"
+    }
+    params = {"q": query, "max": 5}
+
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        data = response.json()
+        return [item["title"] + " - " + item.get("description", "") for item in data.get("articles", [])]
     except:
         return []
 
@@ -65,11 +79,11 @@ def rag_query(user_query, documents, encoder, index, top_k=2):
 
     prompt = f"""
 "You are a precise and logical assistant designed to answer questions using real-time web and news data. "
-    "Your task is to analyze the user's query step-by-step, identify the key intent, and extract the answer strictly from the provided context. "
-    "Never make assumptions or introduce information not explicitly present in the context. "
-    "If the context lacks enough information to answer the query, respond with:\n"
-    "\"The provided information does not contain enough details to answer this question.\"\n"
-    "Prioritize clarity, brevity, and factual accuracy in your responses."
+"Your task is to analyze the user's query step-by-step, identify the key intent, and extract the answer strictly from the provided context. "
+"Never make assumptions or introduce information not explicitly present in the context. "
+"If the context lacks enough information to answer the query, respond with:\n"
+"\"The provided information does not contain enough details to answer this question.\"\n"
+"Prioritize clarity, brevity, and factual accuracy in your responses."
 
 Context:
 {context}
@@ -113,6 +127,11 @@ def rag_pipeline(user_query):
 
     if not answer or "don't know" in answer or "not contain enough details" in answer.lower():
         documents = fetch_newscatcher(user_query)
+        index, _ = create_faiss_index(documents, encoder)
+        answer = rag_query(user_query, documents, encoder, index)
+
+    if not answer or "don't know" in answer or "not contain enough details" in answer.lower():
+        documents = fetch_news67(user_query)
         index, _ = create_faiss_index(documents, encoder)
         answer = rag_query(user_query, documents, encoder, index)
 
